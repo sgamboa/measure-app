@@ -14,16 +14,13 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Service
 public class MeasureService implements IMeasureService {
 
-    private IMeasureRepository measureRepository;
+    private final IMeasureRepository measureRepository;
 
     final String uri = "https://nominatim.openstreetmap.org/search?q=";
-
-    final RestTemplate restTemplate = new RestTemplate();
 
     public MeasureService(IMeasureRepository measureRepository) {
         this.measureRepository = measureRepository;
@@ -62,8 +59,7 @@ public class MeasureService implements IMeasureService {
                     Math.sin(dLon/2) * Math.sin(dLon/2)
             ;
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        double d = R * c; // Distance in km
-        return d;
+        return R * c; // Distance in km
     }
 
     private double pointByFactor(double point) {
@@ -86,7 +82,6 @@ public class MeasureService implements IMeasureService {
         }
 
         String responseString = response.body();
-        System.out.println(responseString);
 
         Response[] data = null;
         try {
@@ -97,7 +92,6 @@ public class MeasureService implements IMeasureService {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        System.out.println(data);
         return data[0];
     }
     
